@@ -2,6 +2,7 @@ from fastapi import HTTPException, status
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.orm import joinedload
+from sqlalchemy.sql.expression import delete
 
 from ..models.category import Category
 from ..models.product import Product
@@ -55,3 +56,10 @@ class ProductRepository:
         await self.session.commit()
         await self.session.refresh(product)
         return await self.get_by_id(product.id)
+
+    async def delete(self, product_id: int) -> Product:
+        product = await self.get_by_id(product_id)
+        statement = delete(Product).where(Product.id == product_id)
+        await self.session.execute(statement)
+        await self.session.commit()
+        return product
