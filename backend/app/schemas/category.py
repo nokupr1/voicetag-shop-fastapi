@@ -13,3 +13,8 @@ class CategoryCreate(CategoryBase):
 class CategoryResponse(CategoryBase):
     id: int = Field(gt=0, description="Category identifier")
     model_config = {"from_attributes": True}
+
+
+class CategoryListResponse(BaseModel):
+    categories: list[CategoryResponse]
+    total: int = Field(ge=0, description="Total number of categories")
