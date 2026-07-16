@@ -57,6 +57,14 @@ class ProductRepository:
         await self.session.refresh(product)
         return await self.get_by_id(product.id)
 
+    async def update(self, product_id: int, product_data: ProductCreate) -> Product:
+        product = await self.get_by_id(product_id)
+        for key, value in product_data.model_dump().items():
+            setattr(product, key, value)
+        await self.session.commit()
+        await self.session.refresh(product)
+        return product
+
     async def delete(self, product_id: int) -> Product:
         product = await self.get_by_id(product_id)
         statement = delete(Product).where(Product.id == product_id)

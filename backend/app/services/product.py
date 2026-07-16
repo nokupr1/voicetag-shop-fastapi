@@ -22,3 +22,9 @@ class ProductService:
     async def delete_product(self, product_id: int) -> ProductResponse:
         product = await self.product_repository.delete(product_id)
         return ProductResponse.model_validate(product)
+
+    async def update_product(
+        self, product_id: int, data: ProductCreate
+    ) -> ProductResponse:
+        product = await self.product_repository.update(product_id, data)
+        return ProductResponse.model_validate(product)

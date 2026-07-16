@@ -30,3 +30,12 @@ async def delete_product(
     service = ProductService(db)
     product = await service.delete_product(product_id)
     return ProductResponse.model_validate(product)
+
+
+@product_router.patch("/", tags=["products"])
+async def update_product(
+    product_id: int, product_data: ProductCreate, db: AsyncSession = Depends(get_db)
+) -> ProductResponse:
+    service = ProductService(db)
+    product = await service.update_product(product_id, product_data)
+    return ProductResponse.model_validate(product)
