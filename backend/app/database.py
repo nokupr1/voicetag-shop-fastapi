@@ -1,5 +1,3 @@
-from contextlib import asynccontextmanager
-
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 from sqlalchemy.orm import DeclarativeBase
 
@@ -20,13 +18,9 @@ class Base(DeclarativeBase):
     pass
 
 
-@asynccontextmanager
 async def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        await db.close()
+    async with SessionLocal() as session:
+        yield session
 
 
 async def init_db():

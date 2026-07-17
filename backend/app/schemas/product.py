@@ -22,6 +22,7 @@ class ProductCreate(ProductBase):
 class ProductResponse(ProductBase):
     id: int = Field(gt=0, description="Product identifier")
     category: CategoryResponse = Field(description="Product category details")
+
     model_config = {"from_attributes": True}
 
 
