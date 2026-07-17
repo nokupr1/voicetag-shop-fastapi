@@ -19,6 +19,7 @@ async def get_product(
     product_id: int, db: AsyncSession = Depends(get_db)
 ) -> ProductResponse:
     service = ProductService(db)
+<<<<<<< HEAD
     return await service.get_product(product_id)
 
 
@@ -28,3 +29,16 @@ async def get_products_by_category(
 ) -> ProductListResponse:
     service = ProductService(db)
     return await service.get_products_by_category(category_id)
+=======
+    product = await service.delete_product(product_id)
+    return ProductResponse.model_validate(product)
+
+
+@product_router.patch("/", tags=["products"])
+async def update_product(
+    product_id: int, product_data: ProductCreate, db: AsyncSession = Depends(get_db)
+) -> ProductResponse:
+    service = ProductService(db)
+    product = await service.update_product(product_id, product_data)
+    return ProductResponse.model_validate(product)
+>>>>>>> a1ea5748c597144fda260245ab6181892ce99813
