@@ -12,16 +12,12 @@ class ProductService:
         self.product_repository = ProductRepository(db)
         self.category_repository = CategoryRepository(db)
 
-    async def create_product(self, data: ProductCreate) -> ProductResponse:
-        product = await self.product_repository.create(data)
-        return ProductResponse.model_validate(product)
-
-    async def get_all_products(self) -> ProductListResponse:
+    async def get_all(self) -> ProductListResponse:
         products = await self.product_repository.get_all()
         result = [ProductResponse.model_validate(product) for product in products]
         return ProductListResponse(products=result, total=len(result))
 
-    async def get_product(self, product_id: int) -> ProductResponse:
+    async def get_by_id(self, product_id: int) -> ProductResponse:
         product = await self.product_repository.get_by_id(product_id)
         return ProductResponse.model_validate(product)
 
@@ -30,7 +26,7 @@ class ProductService:
         result = [ProductResponse.model_validate(product) for product in products]
         return ProductListResponse(products=result, total=len(result))
 
-    async def get_products_by_category(self, category_id: int) -> ProductListResponse:
+    async def get_by_category(self, category_id: int) -> ProductListResponse:
         category = await self.category_repository.get_by_id(category_id)
         if not category:
             raise HTTPException(
@@ -41,12 +37,6 @@ class ProductService:
         result = [ProductResponse.model_validate(product) for product in products]
         return ProductListResponse(products=result, total=len(result))
 
-    async def delete_product(self, product_id: int) -> ProductResponse:
-        product = await self.product_repository.delete(product_id)
-        return ProductResponse.model_validate(product)
-
-    async def update_product(
-        self, product_id: int, data: ProductCreate
-    ) -> ProductResponse:
-        product = await self.product_repository.update(product_id, data)
+    async def create(self, data: ProductCreate) -> ProductResponse:
+        product = await self.product_repository.create(data)
         return ProductResponse.model_validate(product)
